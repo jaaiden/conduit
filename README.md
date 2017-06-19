@@ -9,6 +9,16 @@ If you have any questions, comments, or concerns, feel free to submit an issue o
 
 ---
 
+#### Building from Source
+
+Clone the repository to a folder, make sure you have at least Node 6.0 installed, and run the following:
+```
+npm install
+node app.js
+```
+
+---
+
 #### Credits
 - [Electron](https://electron.atom.io)
 - [Bootstrap](https://getbootstrap.com)
