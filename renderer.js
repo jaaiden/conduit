@@ -4,7 +4,7 @@ const fs = require('fs')
 const path = require('path')
 
 var is_new_file = true
-var has_changes_made = true
+var has_changes_made = false
 var curFilePath = null
 var curFileName = null
 var exit_file_operation_complete = false
@@ -41,7 +41,11 @@ editor.getSession().on('change', function () {
   document.getElementById('live-preview').innerHTML = converter.makeHtml(editor.getValue())
 })
 
-
+if (process.platform == "darwin") {
+  document.getElementById('ctx-close-btn').hidden = true
+  document.getElementById('ctx-min-btn').hidden = true
+  document.getElementById('ctx-max-btn').hidden = true
+}
 
 
 
@@ -61,7 +65,7 @@ document.getElementById('ctx-max-btn').addEventListener('click', function (e) {
 
 // Opening and saving files
 
-function save_file() {
+function save_file(content) {
   if (is_new_file) {
     dialog.showSaveDialog({
       title: 'Save file as...',
@@ -74,7 +78,7 @@ function save_file() {
     }, (filename) => {
       if (filename === undefined)
         return
-      fs.writeFile(filename, editor.getValue(), function (err) {
+      fs.writeFile(filename, ((typeof content === 'undefined') ? editor.getValue() : content), function (err) {
         if (err) {
           let errNotify = new Notification('Conduit', {
             body: '(' + err.code + ') Error saving file: ' + err.message
@@ -137,35 +141,6 @@ function open_file() {
   })
 }
 
-function display_unsaved_changes_dialog() {
-  exit_file_operation_complete = false
-  dialog.showMessageBox({
-    type: 'warning',
-    buttons: ['Cancel', 'Close without saving', 'Save changes'],
-    defaultId: 2,
-    title: 'Unsaved changes!',
-    message: 'You currently have unsaved changes. Opening a new file will cause you to lose your work! What would you like to do?',
-    cancelId: 0
-  }, function (resp, checked) {
-    console.info(resp)
-    if (resp == 0)
-      return
-    else if (resp == 1) {
-      // Close without saving
-      exit_file_operation_complete = true
-      return
-    }
-    else if (resp == 2) {
-      // Save changes and close
-      save_file()
-      exit_file_operation_complete = true
-    }
-    else
-      return
-  })
-  exit_file_operation_complete = false
-}
-
 function update_filename_title(filename) {
   document.getElementById('filename-text').innerHTML = filename
 }
@@ -177,9 +152,29 @@ function update_filename_title(filename) {
 
 document.getElementById('ctx-open-btn').addEventListener('click', function (e) {
   if (has_changes_made) {
-    display_unsaved_changes_dialog()
-    if (exit_file_operation_complete)
-      open_file()
+    dialog.showMessageBox({
+      type: 'warning',
+      buttons: ['Cancel', 'Close without saving', 'Save changes'],
+      defaultId: 2,
+      title: 'Unsaved changes!',
+      message: 'You currently have unsaved changes. Opening a new file will cause you to lose your work! What would you like to do?',
+      cancelId: 0
+    }, function (resp, checked) {
+      console.info(resp)
+      if (resp == 0)
+        return
+      else if (resp == 1) {
+        // Close without saving
+        open_file()
+      }
+      else if (resp == 2) {
+        // Save changes and close
+        save_file(editor.getValue())
+        open_file()
+      }
+      else
+        return
+    })
   }
   else
     open_file()
@@ -187,13 +182,45 @@ document.getElementById('ctx-open-btn').addEventListener('click', function (e) {
 
 document.getElementById('ctx-save-btn').addEventListener('click', function (e) { save_file() })
 document.getElementById('ctx-new-btn').addEventListener('click', function (e) {
-  if (has_changes_made) display_unsaved_changes_dialog()
-
-  if (exit_file_operation_complete || !has_changes_made) {
+  if (has_changes_made) {
+    dialog.showMessageBox({
+      type: 'warning',
+      buttons: ['Cancel', 'Close without saving', 'Save changes'],
+      defaultId: 2,
+      title: 'Unsaved changes!',
+      message: 'You currently have unsaved changes. Opening a new file will cause you to lose your work! What would you like to do?',
+      cancelId: 0
+    }, function (resp, checked) {
+      console.info(resp)
+      if (resp == 0)
+        return
+      else if (resp == 1) {
+        // Close without saving
+        update_filename_title('untitled document')
+        has_changes_made = false
+        is_new_file = true
+        editor.setValue('')
+        document.getElementById('file-modified').hidden = true
+      }
+      else if (resp == 2) {
+        // Save changes and close
+        var contents = editor.getValue()
+        save_file(contents)
+        update_filename_title('untitled document')
+        has_changes_made = false
+        is_new_file = true
+        editor.setValue('')
+        document.getElementById('file-modified').hidden = true
+      }
+      else
+        return
+    })
+  }
+  else {
     update_filename_title('untitled document')
     has_changes_made = false
     is_new_file = true
     editor.setValue('')
-    document.getElementById('file-modified').hidden = false
+    document.getElementById('file-modified').hidden = true
   }
 })

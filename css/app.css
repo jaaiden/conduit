@@ -1,0 +1,38 @@
+﻿@import url(https://fonts.googleapis.com/css?family=Oxygen+Mono);
+
+html, body { height: 100%; }
+body {
+  padding-top:45px;
+  background-image: url('../img/bg.png');
+  background-position: center center;
+  background-repeat: repeat;
+}
+.wrapper { height: 100%; }
+
+nav { -webkit-app-region: drag; }
+a, button, li, input, p { -webkit-app-region: no-drag; }
+
+.left-panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.right-panel {
+  display: flex;
+  padding-top: 10px;
+}
+
+#editor {
+  font-family:'Oxygen Mono', monospace;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+@media (max-width: 1200px) {
+  .left-panel { height: 50%; }
+  .right-panel { height: 50%; }
+}

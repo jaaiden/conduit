@@ -1,13 +1,16 @@
 {
   "name": "conduit",
-  "version": "0.0.0",
+  "version": "0.0.8",
   "description": "Conduit",
   "main": "app.js",
   "author": {
-    "name": "zdevine"
+    "name": "zackdevine"
   },
+  "license": "GNU GPL v3",
+  "repository": "zackdevine/conduit",
   "dependencies": {
     "electron": "1.6.11",
     "showdown": "^1.7.1"
-  }
+  },
+  "scripts": { "start": "electron ." }
 }
