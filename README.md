@@ -1,6 +1,4 @@
-##Welcome to Conduit!
-
----
+## Welcome to Conduit!
 
 Conduit is a lightweight, easy-to-use markdown editor.
 It uses [GitHub's Flavored Markdown Syntax](https://guides.github.com/features/mastering-markdown/) for syntax editing and parsing.
@@ -11,7 +9,7 @@ If you have any questions, comments, or concerns, feel free to submit an issue o
 
 ---
 
-####Credits
+#### Credits
 - [Electron](https://electron.atom.io)
 - [Bootstrap](https://getbootstrap.com)
 - [Yeti theme](https://bootswatch.com/yeti) (Bootswatch)
@@ -21,5 +19,5 @@ If you have any questions, comments, or concerns, feel free to submit an issue o
 
 ---
 
-####License
+#### License
 Conduit is licensed under the GNU General Public License v3.0. A copy can be found within the root of the repository.
