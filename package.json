@@ -1,0 +1,13 @@
+{
+  "name": "conduit",
+  "version": "0.0.0",
+  "description": "Conduit",
+  "main": "app.js",
+  "author": {
+    "name": "zdevine"
+  },
+  "dependencies": {
+    "electron": "1.6.11",
+    "showdown": "^1.7.1"
+  }
+}
