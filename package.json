@@ -9,7 +9,7 @@
   "license": "GNU GPL v3",
   "repository": "zackdevine/conduit",
   "dependencies": {
-    "electron": "1.6.11",
+    "electron": "1.8.2-beta5",
     "showdown": "^1.7.1"
   },
   "scripts": { "start": "electron ." }
